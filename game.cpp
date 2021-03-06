@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "game.h"
 
-void game::run(void) 
+game::game() 
 {
-	puts("");
+	//rabbits.push_back(Rabbit(5, 20));
 }

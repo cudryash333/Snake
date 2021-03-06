@@ -11,7 +11,9 @@ $(EXE) : $(OBJ)
 clean:
 	$(RM) $(OBJ) $(EXE)
 
+tview.o : tview.h 
+
 depend:
-	$(CXX) -MM$(OBJ:.o=.cc) >.depend
+	$(CXX) -MM $(OBJ:.o=.cpp) >.depend
 
 -include .depend
