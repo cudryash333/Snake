@@ -1,2 +1,1 @@
-# 4sem
-# Snake
+It's a classic game Snake
