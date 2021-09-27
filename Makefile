@@ -1,17 +1,15 @@
-LIBS =
-OBJ = game.o main.o tview.o 
-EXE = snake
 CXXFLAGS += -Wall -g
+OBJ = game.o main.o tview.o gview.o view.o ai_controller.o 
+EXE = snake
+LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
 all: $(EXE)
 
 $(EXE) : $(OBJ)
 	$(CXX) -o $@ $^ $(LIBS)
 
-clean:
-	$(RM) $(OBJ) $(EXE)
-
-tview.o : tview.h 
+clear:
+	$(RM) $(OBJ) $(EXE) 
 
 depend:
 	$(CXX) -MM $(OBJ:.o=.cpp) >.depend
