@@ -4,6 +4,8 @@ Gview::Gview()
 {
 	window.create(sf::VideoMode(500, 500), "Game");
 	window.setVerticalSyncEnabled(true);
+	//const Coord& r;
+	//const DrawSnake& s;
 	while (window.isOpen())
     	{
 			sf::Event event;
@@ -13,10 +15,9 @@ Gview::Gview()
 					window.close();
         		}
         Gview::draw();
-
-		//window.draw(rabsprite);
-		window.display();
-		//
+	//paint(r);
+	//paint(s);
+	window.display();
     	}
 }
 
@@ -54,6 +55,8 @@ void Gview::paint(const DrawSnake& s)
 {
 	sf::Sprite sprite_head;
 	sf::Sprite sprite_body;
+	sf::Sprite sprite_tail;
+	sf::Texture texture_tail;
 	sf::Texture texture_head;
 	sf::Texture texture_body;
 	bool first = true;
@@ -65,8 +68,13 @@ void Gview::paint(const DrawSnake& s)
 			sprite_body.setTexture(texture_body);
 			sprite_body.setTextureRect(sf::IntRect(c.x, c.y, 50, 50));
 			window.draw(sprite_body);
-                }
-                first = false;
+                } else {
+			texture_tail.loadFromFile("tail.png");
+			sprite_head.setTexture(texture_tail);
+			sprite_tail.setTextureRect(sf::IntRect(c.x, c.y, 50, 50));
+			window.draw(sprite_tail);
+		}	
+		first = false;
         }
         Coord head = s.body.front();
 	texture_head.loadFromFile("547-5471472_snake-mask.png");
@@ -104,22 +112,44 @@ int Gview::get_col()
 	return col;
 }
 
-void Gview::ontimer(const timer_fn, int time)
+void Gview::ontimer(const timer_fn f, int time)
 {
-
+	timer.first = f;
+	timer.second = time;
 }
 
-void Gview::onkey(const key_fn)
+void Gview::onkey(const key_fn k)
 {
-
+	pressed.push_back(k);
 }
 
 void Gview::runloop()
 {
-
+	struct pollfd fds[] = { {0, POLLIN, 0} };
+	finished = false;
+	int flag = 1;
+	while(!finished)
+	{
+		int n = poll(fds, 1, timer.second * flag);
+		flag = 1;
+		if (n == 0)
+		{
+			timer.first();
+		}
+		else
+		{
+			flag = 0;
+			char buf[1];
+			read(0, buf, 1);
+			for (auto f : pressed)
+			{
+				f(buf[0]);
+			}
+		}
+	}
 }
 
 void Gview::quit()
 {
-
+	finished = true;
 }
