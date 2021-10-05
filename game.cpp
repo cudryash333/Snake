@@ -3,8 +3,9 @@
 #include <algorithm>
 #include <cmath>
 
-Game::Game(View* v) 
+Game::Game(View* myview) 
 {
+	v = myview;
 	int col = v->get_col();
 	int row = v->get_row();
 	srand(time(NULL));
